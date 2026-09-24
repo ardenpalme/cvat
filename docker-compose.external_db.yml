@@ -6,10 +6,10 @@
 
 x-backend-settings: &backend-settings
   environment:
-    CVAT_POSTGRES_HOST:
-    CVAT_POSTGRES_PORT:
-    CVAT_POSTGRES_DBNAME:
-    CVAT_POSTGRES_USER:
+    CVAT_POSTGRES_HOST: ep-rough-band-b2iw810m.c-6.eu-central-1.aws.neon.tech
+    CVAT_POSTGRES_PORT: 5432
+    CVAT_POSTGRES_DBNAME: neondb
+    CVAT_POSTGRES_USER: neondb_owner
     CVAT_POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
   secrets:
     - postgres_password
