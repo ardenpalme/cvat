@@ -266,9 +266,9 @@ services:
     image: traefik:v3.6
     container_name: traefik
     restart: always
-    ports:
-      - 8080:8080
-      - 8090:8090
+    ports: !override
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8090:8090"
     environment:
       CVAT_HOST: ${CVAT_HOST:-localhost}
       DJANGO_LOG_VIEWER_HOST: grafana
@@ -290,6 +290,7 @@ services:
 
       TRAEFIK_LOG_FORMAT: json
       TRAEFIK_ENTRYPOINTS_web_ADDRESS: :8080
+      TRAEFIK_ENTRYPOINTS_web_FORWARDEDHEADERS_INSECURE: "true"
       TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: "false"
       TRAEFIK_PROVIDERS_DOCKER_NETWORK: cvat
       TRAEFIK_PROVIDERS_FILE_DIRECTORY: /etc/traefik/rules
