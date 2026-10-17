@@ -462,6 +462,11 @@ class FrameQuality(IntEnum):
     ORIGINAL = 100
 
 
+def get_backing_cs_media_dirname(data_id: int) -> str:
+    "Key prefix of a task's media in its backing cloud storage"
+    return f"cvat/{data_id}/raw"
+
+
 class Data(models.Model):
     MANIFEST_FILENAME: ClassVar[str] = "manifest.jsonl"
 
@@ -629,7 +634,7 @@ class Data(models.Model):
             return SubdirectoryCloudStorageClient(
                 # We can trust backing cloud storage, since only an admin can set it.
                 self.local_storage_backing_cs.get_client(is_trusted=True),
-                f"data/{self.id}/raw",
+                get_backing_cs_media_dirname(self.id),
             )
 
         return None

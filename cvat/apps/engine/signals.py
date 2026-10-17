@@ -17,7 +17,18 @@ from cvat.apps.engine.cache_signals import cache_item_created_signal, cache_item
 from cvat.apps.events.handlers import handle_cache_item_create, handle_cache_item_read
 from cvat.apps.iam.models import User
 
-from .models import Asset, CloudStorage, Data, Job, JobType, Profile, Project, StatusChoice, Task
+from .models import (
+    Asset,
+    CloudStorage,
+    Data,
+    Job,
+    JobType,
+    Profile,
+    Project,
+    StatusChoice,
+    Task,
+    get_backing_cs_media_dirname,
+)
 
 # TODO: need to log any problems reported by shutil.rmtree when the new
 # analytics feature is available. Now the log system can write information
@@ -143,7 +154,7 @@ def _delete_from_backing_storage(
     # Create the client after commit to avoid retaining one heavyweight client per deleted Data.
     storage_client = SubdirectoryCloudStorageClient(
         backing_storage.get_client(is_trusted=True),
-        f"data/{data_id}/raw",
+        get_backing_cs_media_dirname(data_id),
     )
     storage_client.bulk_delete(media_paths)
 

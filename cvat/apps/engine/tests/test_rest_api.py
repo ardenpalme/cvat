@@ -8275,7 +8275,7 @@ class TaskBackingCloudStorageTestCase(_CloudStorageTestBase, ExportApiTestBase):
                     return upload_dir / rel_path
 
                 def cloud_key(rel_path):
-                    return PurePath(f"data/{data.id}/raw", rel_path).as_posix()
+                    return PurePath(f"cvat/{data.id}/raw", rel_path).as_posix()
 
                 if mode == TaskMode.ANNOTATION:
                     self.assertTrue(data.images.exists())
@@ -8330,7 +8330,7 @@ class TaskBackingCloudStorageTestCase(_CloudStorageTestBase, ExportApiTestBase):
 
         image_path = self._IMAGE_PATHS[0]
         self.assertFalse((data.get_upload_dirname() / image_path).exists())
-        self.assertTrue(self.mock_aws.file_exists(f"data/{data.id}/raw/{image_path}"))
+        self.assertTrue(self.mock_aws.file_exists(f"cvat/{data.id}/raw/{image_path}"))
 
     def test_deletion_with_backing_cs(self):
         task = self._create_local_task()
@@ -8340,7 +8340,7 @@ class TaskBackingCloudStorageTestCase(_CloudStorageTestBase, ExportApiTestBase):
         upload_dir = data.get_upload_dirname()
 
         def cloud_key(rel_path):
-            return PurePath(f"data/{data.id}/raw", rel_path).as_posix()
+            return PurePath(f"cvat/{data.id}/raw", rel_path).as_posix()
 
         with self.captureOnCommitCallbacks(execute=True):
             data.move_to_backing_cs(CloudStorage.objects.get(id=self.cloud_storage_id))
