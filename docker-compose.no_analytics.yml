@@ -1,0 +1,34 @@
+# Optional Docker Compose file that disables CVAT's analytics stack
+# (ClickHouse, Vector, Grafana) to save memory on small hosts.
+#
+# An empty DJANGO_LOG_SERVER_HOST keeps the backend from attaching the
+# Vector log handler (see LOGGING in cvat/settings/base.py), so events are
+# dropped instead of being sent to a missing host.
+
+x-no-analytics-env: &no-analytics-env
+  environment:
+    DJANGO_LOG_SERVER_HOST: ""
+
+services:
+  cvat_clickhouse:
+    deploy:
+      replicas: 0
+  cvat_vector:
+    deploy:
+      replicas: 0
+  cvat_grafana:
+    deploy:
+      replicas: 0
+
+  cvat_server:
+    environment:
+      DJANGO_LOG_SERVER_HOST: ""
+      CVAT_ANALYTICS: 0
+  cvat_worker_utils: *no-analytics-env
+  cvat_worker_import: *no-analytics-env
+  cvat_worker_export: *no-analytics-env
+  cvat_worker_annotation: *no-analytics-env
+  cvat_worker_webhooks: *no-analytics-env
+  cvat_worker_quality_reports: *no-analytics-env
+  cvat_worker_chunks: *no-analytics-env
+  cvat_worker_consensus: *no-analytics-env
